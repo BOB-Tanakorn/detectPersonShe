@@ -12,3 +12,6 @@ test.py
 __pycache__
 imgBefore.png
 imgAfter.png
+build
+dist
+detectPersonShe.spec

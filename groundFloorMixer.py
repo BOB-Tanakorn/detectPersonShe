@@ -98,15 +98,21 @@ if saveImg == True:
     image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
     img_show = image_np.copy()
     cv2.imwrite(path + '/imgAfter.png', image_np)
+    
+    location = 'groundFloorMixer'
+    location = location.replace("'", "")
+
     if countPerson >= 1:
         notifyFile(path + '/imgAfter.png', countPerson)
         statusPerson = True
+        cursor = cursor.execute('UPDATE detectPersonShe SET statusPerson=? WHERE location=?', (True, location))
+        cursor.commit()
+
     else:
         statusPerson = False
-    # location = 'groundFloorMixer'
-    # location = location.replace("'", "")
-    # cursor.execute('UPDATE detectPersonShe SET location=?, statusPerson=? WHERE id=1', (location, statusPerson))
-    # cursor.commit()
+        cursor = cursor.execute('UPDATE detectPersonShe SET statusPerson=? WHERE location=?', (False, location))
+        cursor.commit()
+        # notifyFile(path + '/imgAfter.png', countPerson)
 
 upstatus = cursor.execute('UPDATE statusPrograms SET status=? WHERE programs=?', (False, programsName))
 upstatus.commit()
