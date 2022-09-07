@@ -30,6 +30,7 @@ while True:
             #connect database
             connectRunPrograms = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server}; SERVER=localhost; DATABASE=projectComputerVision; UID=sa; PWD=123456")
             cursorPrograms = connectRunPrograms.cursor()
+            runGoundMixer = connectRunPrograms.cursor()
             sqlCmdSelect = 'SELECT status FROM statusPrograms'
             cursorPrograms.execute(sqlCmdSelect)
             cursorPrograms = cursorPrograms.fetchall()
@@ -43,6 +44,10 @@ while True:
             time.sleep(5)
 
             if statusGrounsMixer == True:
+                programsName = 'groundFloorMixer'
+                programsName = programsName.replace("'", "")
+                runGoundMixer = runGoundMixer.execute('UPDATE statusPrograms SET status=? WHERE programs=?', (True, programsName))
+                runGoundMixer.commit()
                 print('{} >>> start process location groundFloorMixer'.title().format(datetime.datetime.now()))
                 os.system(pathBacthFile + '/groundFloorMixer.bat')
                 time.sleep(3)
@@ -61,6 +66,8 @@ while True:
                     countGroundMixer = 0
 
                 print('{} >>> end process location groundFloorMixer'.title().format(datetime.datetime.now()))
+                runGoundMixer = runGoundMixer.execute('UPDATE statusPrograms SET status=? WHERE programs=?', (False, programsName))
+                runGoundMixer.commit()
                 runGroundMixer = False
 
              
@@ -70,6 +77,7 @@ while True:
             #connect database
             connectGroundPL = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server}; SERVER=localhost; DATABASE=projectComputerVision; UID=sa; PWD=123456")
             cursorGroundPL = connectGroundPL.cursor()
+            runGroundPL = connectGroundPL.cursor()
             cmdGroundPL = 'SELECT status FROM statusPrograms'
             cursorGroundPL.execute(cmdGroundPL)
             cursorGroundPL = cursorGroundPL.fetchall()
@@ -79,11 +87,14 @@ while True:
                     break
                 else:
                     statusGrounsPL = True
-
-                print('iGroundPL[0] =', iGroundPL[0])
             time.sleep(5)
 
             if statusGrounsPL == True:
+                programsName = 'groundFloorPL'
+                programsName = programsName.replace("'", "")
+                runGroundPL = runGroundPL.execute('UPDATE statusPrograms SET status=? WHERE programs=?', (True, programsName))
+                runGroundPL.commit()
+
                 print('{} >>> start process location groundFloorPL'.title().format(datetime.datetime.now()))
                 os.system(pathBacthFile + '/groundFloorPL.bat')
                 time.sleep(3)
@@ -101,6 +112,8 @@ while True:
                     countGroundPL = 0
                     
                 print('{} >>> end process location groundFloorPL'.title().format(datetime.datetime.now()))
+                runGroundPL = runGroundPL.execute('UPDATE statusPrograms SET status=? WHERE programs=?', (False, programsName))
+                runGroundPL.commit()
                 runGroundPL = False
 
     time.sleep(1)

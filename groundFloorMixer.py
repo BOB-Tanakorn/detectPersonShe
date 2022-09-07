@@ -10,11 +10,6 @@ path = os.getcwd().replace('\\', '/')
 #baseLocal
 connect = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server}; SERVER=localhost; DATABASE=projectComputerVision; UID=sa; PWD=123456")
 cursor = connect.cursor()
-programsName = 'groundFloorMixer'
-programsName = programsName.replace("'", "")
-
-upstatus = cursor.execute('UPDATE statusPrograms SET status=? WHERE programs=?', (True, programsName))
-upstatus.commit()
 
 labelmap_path = path + '/mscoco_label_map.pbtxt'
 category_index = label_map_util.create_category_index_from_labelmap(labelmap_path, use_display_name=True)
@@ -114,5 +109,3 @@ if saveImg == True:
         cursor.commit()
         # notifyFile(path + '/imgAfter.png', countPerson)
 
-upstatus = cursor.execute('UPDATE statusPrograms SET status=? WHERE programs=?', (False, programsName))
-upstatus.commit()
