@@ -27,7 +27,7 @@ location = {
 def _lineNotify(payload,file=None):
     import requests
     url = 'https://notify-api.line.me/api/notify'
-    token = 'L6EXQTUrlZT0Bz7D9LV5HLwDTiG4BkQ1FI6yvnVJdSa'	#กลุ่มตรวจสอบวัตถุดิบ
+    token = 'yYoPiS4TyW2bHja3HvlWrD5iccYefS09VcIBhCzcW1H'	#token ส่วนตัว
     # token = "EVPO0TRxPKQO8QtoIkX2p1uQFVuumR2FEUccTjYDoOY" #กลุ่มเทส she
     # token = '8edczGWSP1hnMeLXKfXseH8Ck1CATRTvLRL5CFSb3PW'	#she
     headers = {'Authorization':'Bearer '+token}
@@ -107,5 +107,5 @@ if saveImg == True:
         statusPerson = False
         cursor = cursor.execute('UPDATE detectPersonShe SET statusPerson=? WHERE location=?', (False, location))
         cursor.commit()
-        # notifyFile(path + '/imgAfter.png', countPerson)
+        notifyFile(path + '/imgAfter.png', countPerson)
 

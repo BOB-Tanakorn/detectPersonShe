@@ -5,20 +5,25 @@ import os
 
 pathBacthFile = os.getcwd().replace('\\', '/')
 
-cursorUpdate = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server}; SERVER=localhost; DATABASE=projectComputerVision; UID=sa; PWD=123456")
-cursorUpdate = cursorUpdate.cursor()
+cursor = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server}; SERVER=localhost; DATABASE=projectComputerVision; UID=sa; PWD=123456")
 
-# sqlCmdUpdate = 'UPDATE checkProgramsRun SET namePrograms = detectPersonShe WHERE id=1'
+locationMixer =  'groundFloorMixer'
+locationMixer = locationMixer.replace("'", "")
+cursorMixer = cursor.cursor()
+cursorstart = cursorMixer.execute('UPDATE statusPrograms SET status=? WHERE programs=?',(False, locationMixer))
+cursorstart.commit()
 
-# value = 'detectPersonNew'
-# cursorUpdate = cursorUpdate.execute('UPDATE checkProgramsRun SET namePrograms = ? WHERE id=1', value)
-# cursorUpdate.commit()
+locationPL = 'groundFloorPL'
+locationPL = locationPL.replace("'", "")
+cursorPL = cursor.cursor()
+cursorPL = cursorPL.execute('UPDATE statusPrograms SET status=? WHERE programs=?', (False, locationPL))
+cursorPL.commit()
 
 countGroundMixer = 0
 countGroundPL = 0
 
-startGroundMixer = 120
-startGroundPL = 120
+startGroundMixer = 12
+startGroundPL = 12
 
 while True:
     countGroundMixer += 1
@@ -58,11 +63,11 @@ while True:
                 statusPersonGroundMixer = statusPersonGroundMixer.execute('SELECT statusPerson FROM detectPersonShe WHERE location=?', ltGroundFloorMixer)
                 statusPersonGroundMixer = statusPersonGroundMixer.fetchone()[0]
                 if statusPersonGroundMixer == True:
-                    startGroundMixer = 600
+                    startGroundMixer = 60
                     countGroundMixer = 0
                     timeDelay = 1
                 else:
-                    startGroundMixer = 120
+                    startGroundMixer = 12
                     countGroundMixer = 0
 
                 print('{} >>> end process location groundFloorMixer'.title().format(datetime.datetime.now()))
@@ -105,10 +110,10 @@ while True:
                 statusPersonGroundPL = statusPersonGroundPL.execute('SELECT statusPerson FROM detectPersonShe WHERE location=?', ltGroundFloorPL)
                 statusPersonGroundPL = statusPersonGroundPL.fetchone()[0]
                 if statusPersonGroundPL == True:
-                    startGroundPL = 600
+                    startGroundPL = 60
                     countGroundPL = 0
                 else:
-                    startGroundPL = 120
+                    startGroundPL = 12
                     countGroundPL = 0
                     
                 print('{} >>> end process location groundFloorPL'.title().format(datetime.datetime.now()))
