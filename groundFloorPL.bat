@@ -1,3 +1,3 @@
 @echo on
-call C:\Users\PTF\anaconda3\Scripts\activate.bat
-C:\Users\PTF\anaconda3\envs\tf\python.exe "groundFloorPL.py"
+call C:\Users\PTF\Anaconda3\Scripts\activate.bat
+C:\Users\PTF\Anaconda3\envs\tf\python.exe "groundFloorPL.py"

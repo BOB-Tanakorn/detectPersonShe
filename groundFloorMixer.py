@@ -8,7 +8,7 @@ import datetime
 path = os.getcwd().replace('\\', '/')
 
 #baseLocal
-connect = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server}; SERVER=localhost; DATABASE=projectComputerVision; UID=sa; PWD=123456")
+connect = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server}; SERVER=localhost; DATABASE=projectComputerVision; UID=comVision; PWD=123456")
 cursor = connect.cursor()
 
 labelmap_path = path + '/mscoco_label_map.pbtxt'
@@ -27,9 +27,9 @@ location = {
 def _lineNotify(payload,file=None):
     import requests
     url = 'https://notify-api.line.me/api/notify'
-    token = 'yYoPiS4TyW2bHja3HvlWrD5iccYefS09VcIBhCzcW1H'	#token ส่วนตัว
+    # token = 'yYoPiS4TyW2bHja3HvlWrD5iccYefS09VcIBhCzcW1H'	#token ส่วนตัว
     # token = "EVPO0TRxPKQO8QtoIkX2p1uQFVuumR2FEUccTjYDoOY" #กลุ่มเทส she
-    # token = '8edczGWSP1hnMeLXKfXseH8Ck1CATRTvLRL5CFSb3PW'	#she
+    token = '8edczGWSP1hnMeLXKfXseH8Ck1CATRTvLRL5CFSb3PW'	#she
     headers = {'Authorization':'Bearer '+token}
     return requests.post(url, headers=headers , data = payload, files=file)
 
@@ -76,7 +76,7 @@ if saveImg == True:
         groundtruth_box_visualization_color='black',
         skip_labels=False,
         skip_scores=True,
-        min_score_thresh=0.9,
+        min_score_thresh=0.8,
         line_thickness=2)
 
     countLen = 0
@@ -86,7 +86,7 @@ if saveImg == True:
         pass
     for i in (output_dict['detection_classes']):
         if i == 1:
-            valuesPerson = output_dict['detection_scores'][countLen] >= 0.9
+            valuesPerson = output_dict['detection_scores'][countLen] >= 0.8
             if valuesPerson == True:
                 countPerson += 1
         countLen += 1
@@ -98,7 +98,11 @@ if saveImg == True:
     location = location.replace("'", "")
 
     if countPerson >= 1:
-        notifyFile(path + '/imgAfter.png', countPerson)
+        try:
+            notifyFile(path + '/imgAfter.png', countPerson)
+        except:
+            print('{} >>> not send line ; check internet connecttion'.title().format(datetime.datetime.now()))
+  
         statusPerson = True
         cursor = cursor.execute('UPDATE detectPersonShe SET statusPerson=? WHERE location=?', (True, location))
         cursor.commit()
@@ -107,5 +111,9 @@ if saveImg == True:
         statusPerson = False
         cursor = cursor.execute('UPDATE detectPersonShe SET statusPerson=? WHERE location=?', (False, location))
         cursor.commit()
-        notifyFile(path + '/imgAfter.png', countPerson)
+        # try:
+        #     notifyFile(path + '/imgAfter.png', countPerson)
+        # except:
+        #     print('{} >>> not send line ; check internet connecttion'.title().format(datetime.datetime.now()))
+    
 
